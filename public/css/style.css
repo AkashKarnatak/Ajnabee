@@ -1,0 +1,14 @@
+#videos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 3em;
+  width: 100%;
+  padding: 30px;
+  box-sizing:border-box;
+}
+
+.video-player {
+  width: 100%;
+  border: 2px solid red;
+  background-color: #555;
+}
