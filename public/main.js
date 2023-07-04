@@ -1,4 +1,4 @@
-const WEBSOCKET_URL = process.env.WEBSOCKET_URL
+const WEBSOCKET_URL = ''
 
 if (!WEBSOCKET_URL) {
   throw new Error('Forgot to initialze some variables')
@@ -62,6 +62,11 @@ async function requestConnection() {
       console.log('done')
     }
   }
+
+  document.getElementById('skip-btn').addEventListener('click', (e) => {
+    cn.close()
+    requestConnection()
+  })
 
   cn.oniceconnectionstatechange = async function () {
     if (cn.iceConnectionState === 'disconnected' || cn.iceConnectionState === 'closed') {

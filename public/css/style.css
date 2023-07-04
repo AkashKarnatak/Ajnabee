@@ -18,3 +18,16 @@ h1 {
   border: 2px solid red;
   background-color: #555;
 }
+
+#skip-btn {
+  margin: 10px 0;
+  border: 1px solid #333;
+  background-color: #ddd;
+  height:50px;
+  width:80px;
+  cursor:pointer;
+}
+
+#skip-btn:hover {
+  background-color: #eee;
+}

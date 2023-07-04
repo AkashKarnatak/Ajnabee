@@ -62,7 +62,7 @@ wss.on('connection', (ws) => {
   ws.register('offer', (offer) => {
     // find peer
     const peer = Array.from(wss.availableClients.keys()).random()
-    if (!peer) {
+    if (!peer || peer == ws) {
       return wss.availableClients.set(ws, 0)
     } else {
       console.log('peer availabe', wss.availableClients.size)
