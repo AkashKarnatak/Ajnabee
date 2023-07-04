@@ -2,6 +2,12 @@ const express = require('express')
 const { randomUUID } = require('crypto')
 const { WebSocket, WebSocketServer } = require('ws')
 
+const SERVER_PORT = process.env.SERVER_PORT
+
+if (!SERVER_PORT) {
+  throw new Error('Forgot to initialze some variables')
+}
+
 Array.prototype.random = function () {
   return this[Math.floor(Math.random() * this.length)]
 }
@@ -32,7 +38,7 @@ WebSocket.prototype.request = function(data, callback) {
 }
 
 const app = express()
-const port = 8080
+const port = SERVER_PORT
 
 app.use(express.static('./public'))
 
