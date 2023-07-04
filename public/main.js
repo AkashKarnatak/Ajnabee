@@ -1,5 +1,11 @@
-const ws = new WebSocket('ws://localhost:8080')
-const cn = new RTCPeerConnection()
+const WEBSOCKET_URL = process.env.WEBSOCKET_URL
+
+if (!WEBSOCKET_URL) {
+  throw new Error('Forgot to initialze some variables')
+}
+
+const ws = new WebSocket(WEBSOCKET_URL)
+let cn
 
 WebSocket.prototype.init = function () {
   this.channels = new Map()
@@ -47,21 +53,25 @@ ws.addEventListener('open', () => {
   main()
 })
 
-let rs
-async function main() {
-  cn.onicecandidate = e =>  {
+async function requestConnection() {
+  cn = new RTCPeerConnection()
+  cn.onicecandidate = (e) => {
     if (e.candidate) {
       console.log(e.candidate)
     } else {
       console.log('done')
-      ws.emit('offer', cn.localDescription)
     }
   }
-  ls = await navigator.mediaDevices.getUserMedia({
-    video: true,
-    audio: true,
-  })
-  rs = new MediaStream()
+
+  cn.oniceconnectionstatechange = async function () {
+    if (cn.iceConnectionState === 'disconnected' || cn.iceConnectionState === 'closed') {
+      console.log(cn.iceConnectionState)
+      cn.close()
+      requestConnection()
+    }
+  }
+
+  const rs = new MediaStream()
 
   document.getElementById('video-self').srcObject = ls
   document.getElementById('video-peer').srcObject = rs
@@ -80,4 +90,16 @@ async function main() {
 
   const offer = await cn.createOffer()
   cn.setLocalDescription(offer)
+
+  await new Promise(r => setTimeout(() => r(), 2000))
+
+  ws.emit('offer', cn.localDescription)
+}
+
+async function main() {
+  ls = await navigator.mediaDevices.getUserMedia({
+    video: true,
+    audio: true,
+  })
+  await requestConnection()
 }

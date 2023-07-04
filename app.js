@@ -42,7 +42,12 @@ const server = app.listen(port, '0.0.0.0', () => {
 
 const wss = new WebSocketServer({ server })
 
-wss.availableClients = []
+app.get('/data', (_, res) => {
+  console.log(wss.availableClients)
+  res.sendStatus(200)
+})
+
+wss.availableClients = new Map()
 wss.on('connection', (ws) => {
   console.log('new connection')
   console.log(wss.clients.size)
@@ -50,9 +55,12 @@ wss.on('connection', (ws) => {
 
   ws.register('offer', (offer) => {
     // find peer
-    const peer = wss.availableClients.random()
+    const peer = Array.from(wss.availableClients.keys()).random()
     if (!peer) {
-      return wss.availableClients.push(ws)
+      return wss.availableClients.set(ws, 0)
+    } else {
+      console.log('peer availabe', wss.availableClients.size)
+      wss.availableClients.delete(peer)
     }
     peer.request({ offer }, (answer) => {
       ws.request({ answer }, () => {})
@@ -68,5 +76,6 @@ wss.on('connection', (ws) => {
 
   ws.on('close', () => {
     console.log(wss.clients.size)
+    wss.availableClients.delete(ws)
   })
 })
