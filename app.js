@@ -1,5 +1,4 @@
 const express = require('express')
-const { randomUUID } = require('crypto')
 const { WebSocket, WebSocketServer } = require('ws')
 
 const SERVER_PORT = process.env.SERVER_PORT
@@ -12,9 +11,8 @@ Array.prototype.random = function () {
   return this[Math.floor(Math.random() * this.length)]
 }
 
-WebSocket.prototype.init = function() {
+WebSocket.prototype.init = function () {
   this.channels = new Map()
-  this.resCallbacks = new Map()
   this.on('message', (message) => {
     const { channel, data } = JSON.parse(message.toString())
     this.propagate(channel, data)
@@ -27,14 +25,11 @@ WebSocket.prototype.register = function (channel, callback) {
 
 WebSocket.prototype.propagate = function (channel, data) {
   const callback = this.channels.get(channel)
-  if (!callback) return
+  // redirect message to peer
+  if (!callback && this.peer) {
+    return this.peer.send(JSON.stringify({ channel, data }))
+  }
   callback(data)
-}
-
-WebSocket.prototype.request = function(data, callback) {
-  const uuid = randomUUID()
-  this.resCallbacks.set(uuid, callback)
-  this.send(JSON.stringify({ channel: 'request', data: { uuid, req: data } }))
 }
 
 const app = express()
@@ -54,34 +49,44 @@ app.get('/data', (_, res) => {
 })
 
 wss.availableClients = new Map()
-wss.on('connection', (ws) => {
+wss.on('connection', (ws, req) => {
   console.log('new connection')
-  console.log(wss.clients.size)
+
   ws.init()
 
-  ws.register('offer', (offer) => {
-    // find peer
+  ws.register('match', () => {
     const peer = Array.from(wss.availableClients.keys()).random()
     if (!peer || peer == ws) {
-      return wss.availableClients.set(ws, 0)
-    } else {
-      console.log('peer availabe', wss.availableClients.size)
-      wss.availableClients.delete(peer)
+      console.log('No peers found')
+      console.log(
+        `Pushing ${req.socket.remoteAddress}:${req.socket.remotePort} to queue`
+      )
+      return wss.availableClients.set(
+        ws,
+        `${req.socket.remoteAddress}:${req.socket.remotePort}`
+      )
     }
-    peer.request({ offer }, (answer) => {
-      ws.request({ answer }, () => {})
-    })
-  })
 
-  ws.register('response', (data) => {
-    const { uuid, res } = data
-    const callback = ws.resCallbacks.get(uuid)
-    if (!callback) return
-    callback(res)
+    console.log('peer availabe:', wss.availableClients.get(peer))
+    console.log(
+      `matching ${req.socket.remoteAddress}:${
+        req.socket.remotePort
+      } with ${wss.availableClients.get(peer)}`
+    )
+    wss.availableClients.delete(peer)
+
+    // set peer
+    ws.peer = peer
+    peer.peer = ws
+
+    ws.send(JSON.stringify({ channel: 'begin', data: '' }))
   })
 
   ws.on('close', () => {
-    console.log(wss.clients.size)
+    console.log(
+      `${req.socket.remoteAddress}:${req.socket.remotePort} disconnected`
+    )
+    ws.peer.peer = undefined
     wss.availableClients.delete(ws)
   })
 })
