@@ -82,6 +82,12 @@ wss.on('connection', (ws, req) => {
     ws.send(JSON.stringify({ channel: 'begin', data: '' }))
   })
 
+  ws.register('disconnect', async () => {
+    if (!ws.peer) return
+    ws.peer.peer = undefined
+    ws.peer.send(JSON.stringify({ channel: 'disconnect', data: '' }))
+  })
+
   ws.on('close', () => {
     console.log(
       `${req.socket.remoteAddress}:${req.socket.remotePort} disconnected`

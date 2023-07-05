@@ -7,6 +7,12 @@ if (!WEBSOCKET_URL) {
 const ws = new WebSocket(WEBSOCKET_URL)
 let cn
 
+document.getElementById('skip-btn').addEventListener('click', (e) => {
+  ws.emit('disconnect')
+  pc.close()
+  initializeConnection()
+})
+
 WebSocket.prototype.init = function () {
   this.channels = new Map()
   this.addEventListener('message', (message) => {
@@ -50,12 +56,6 @@ async function initializeConnection() {
       initializeConnection()
     }
   }
-
-  document.getElementById('skip-btn').addEventListener('click', (e) => {
-    ws.emit('disconnect')
-    pc.close()
-    initializeConnection()
-  })
 
   const rs = new MediaStream()
 
