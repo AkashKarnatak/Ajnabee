@@ -52,6 +52,7 @@ async function initializeConnection() {
   }
 
   document.getElementById('skip-btn').addEventListener('click', (e) => {
+    ws.emit('disconnect')
     pc.close()
     initializeConnection()
   })
@@ -72,7 +73,6 @@ async function initializeConnection() {
     })
   }
 
-  console.log('asking for a match...')
   ws.emit('match')
 }
 
@@ -90,6 +90,12 @@ ws.addEventListener('open', async () => {
       const answer = await pc.createAnswer()
       await pc.setLocalDescription(answer)
     }
+  })
+
+  ws.register('disconnect', async () => {
+    console.log('received disconnect request')
+    pc.close()
+    initializeConnection()
   })
 
   ls = await navigator.mediaDevices.getUserMedia({

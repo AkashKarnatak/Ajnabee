@@ -86,7 +86,10 @@ wss.on('connection', (ws, req) => {
     console.log(
       `${req.socket.remoteAddress}:${req.socket.remotePort} disconnected`
     )
-    if (ws.peer) ws.peer.peer = undefined
+    if (ws.peer) {
+      ws.peer.send(JSON.stringify({ channel: 'disconnect', data: '' }))
+      ws.peer.peer = undefined
+    }
     wss.availableClients.delete(ws)
   })
 })
