@@ -36,7 +36,13 @@ WebSocket.prototype.propagate = function (channel, data) {
 }
 
 async function initializeConnection() {
-  pc = new RTCPeerConnection()
+  const iceConfig = {
+    iceServers: [
+      { 'url': 'stun:stun.l.google.com:19302' },
+    ],
+  }
+
+  pc = new RTCPeerConnection(iceConfig)
 
   pc.onicegatheringstatechange = (e) => {
     console.log(e.target.iceGatheringState)
