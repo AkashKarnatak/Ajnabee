@@ -54,6 +54,8 @@ wss.on('connection', (ws, req) => {
 
   ws.init()
 
+  ws.register('ping', () => {})
+
   ws.register('match', () => {
     const peer = Array.from(wss.availableClients.keys()).random()
     if (!peer || peer == ws) {

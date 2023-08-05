@@ -5,7 +5,13 @@ if (!WEBSOCKET_URL) {
 }
 
 const ws = new WebSocket(WEBSOCKET_URL)
-let cn
+setInterval(function() {
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.emit('ping')
+  }
+}, 30000)
+
+let cn,ls
 
 document.getElementById('skip-btn').addEventListener('click', (e) => {
   ws.emit('disconnect')
