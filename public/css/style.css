@@ -1,7 +1,41 @@
 h1 {
+  text-align: left;
+  font-size: 2em;
+  font-weight: 500;
+  margin: 0px;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #eee;
+  padding:0px;
+  margin:0px;
+}
+
+html{
+  all:unset;
+}
+
+#top-bar{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding:10px 30px;
+  border:solid 1px;
+  border-color: lightgray;
+}
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
   text-align: center;
-  font-size: 5em;
-  margin: 0 1em;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  padding: 8px 16px;
+  cursor: pointer;
 }
 
 #videos {
@@ -15,19 +49,48 @@ h1 {
 
 .video-player {
   width: 100%;
+  height:50vh;
   border: 2px solid red;
   background-color: #555;
 }
 
-#skip-btn {
+.skip-btn {
+  margin: 10px 0;
+  border: 1px solid #333;
+  max-width:200px;
+  background-color: #4285f4;
+  border: none;
+  font-weight: 700;
+  cursor:pointer;
+}
+
+.feedback{
+  font-weight: 500;
+}
+
+#self {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+
+}
+
+/* #skip-btn {
   margin: 10px 0;
   border: 1px solid #333;
   background-color: #ddd;
   height:50px;
   width:80px;
   cursor:pointer;
-}
+} */
 
 #skip-btn:hover {
-  background-color: #eee;
+  background-color: #007aff;
+}
+
+#main {
+  display: flex;
+  flex-direction: column;
 }

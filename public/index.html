@@ -1,18 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Boujee</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="css/style.css" rel="stylesheet" />
-  </head>
-  <body>
-    <h1>Boujee</h1>
-    <div id="videos">
-      <video class="video-player" id="video-self" autoplay playsinline muted="muted"></video>
-      <video class="video-player" id="video-peer" autoplay playsinline></video>
-      <button type="button" id="skip-btn">Skip</button>
-    </div>
-    <script src="./main.js"></script>
-  </body>
+	<head>
+		<title>Boujee</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link href="css/style.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<div id="main">
+			<div id="top-bar">
+				<div id="logo">
+					<h1>Boujee</h1>
+				</div>
+        <button class="button feedback">
+          Provide Feedback
+        </button>
+			</div>
+			<div id="videos">
+				<div id="self">
+					<video
+						class="video-player"
+						id="video-self"
+						autoplay
+						playsinline
+						muted="muted"
+					></video>
+					<button type="button" id="skip-btn" class="button skip-btn">
+						Skip
+					</button>
+				</div>
+				<div id="peer">
+					<video
+						class="video-player"
+						id="video-peer"
+						autoplay
+						playsinline
+					></video>
+				</div>
+			</div>
+			<script src="./main.js"></script>
+		</div>
+	</body>
 </html>
