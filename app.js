@@ -44,8 +44,7 @@ const server = app.listen(port, '0.0.0.0', () => {
 const wss = new WebSocketServer({ server })
 
 app.get('/data', (_, res) => {
-  console.log(wss.availableClients)
-  res.sendStatus(200)
+  res.send(Array.from(wss.availableClients.values()))
 })
 
 wss.availableClients = new Map()
