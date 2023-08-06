@@ -58,7 +58,9 @@ wss.on('connection', (ws, req) => {
 
   ws.init()
 
-  ws.register('ping', () => {})
+  ws.register('peopleOnline', () => {
+    ws.send(JSON.stringify({ channel: 'peopleOnline', data: wss.clients.size }))
+  })
 
   ws.register('match', () => {
     const peer = Array.from(wss.availableClients.keys()).random()

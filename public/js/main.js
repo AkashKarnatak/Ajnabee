@@ -4,10 +4,12 @@ if (!WEBSOCKET_URL) {
   throw new Error('Forgot to initialze some variables')
 }
 
+const $peopleOnline = document.querySelector('#peopleOnline p span')
+
 const ws = new WebSocket(WEBSOCKET_URL)
 setInterval(function() {
   if (ws.readyState === WebSocket.OPEN) {
-    ws.emit('ping')
+    ws.emit('peopleOnline')
   }
 }, 30000)
 
@@ -85,6 +87,7 @@ async function initializeConnection() {
     })
   }
 
+  ws.emit('peopleOnline')
   ws.emit('match')
 }
 
@@ -94,6 +97,10 @@ ws.addEventListener('open', async () => {
   ws.register('begin', async () => {
     const offer = await pc.createOffer()
     await pc.setLocalDescription(offer)
+  })
+
+  ws.register('peopleOnline', async (data) => {
+    $peopleOnline.innerHTML = data
   })
 
   ws.register('description', async (data) => {

@@ -25,6 +25,21 @@ html {
   border-color: lightgray;
 }
 
+#top-right {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#peopleOnline p {
+  color: #166af4;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 0;
+  margin: 10px;
+  margin-right: 20px;
+}
+
 .button {
   background-color: #4caf50; /* Green */
   border: none;
