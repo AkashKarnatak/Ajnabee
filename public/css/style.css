@@ -45,6 +45,7 @@ html {
   width: 100%;
   padding: 30px;
   box-sizing: border-box;
+  padding-bottom: 10px;
 }
 
 .video-player {
@@ -59,11 +60,14 @@ html {
 }
 
 #skip-btn {
-  margin: 10px 0;
+  margin: 0 30px;
+  margin-bottom: 20px;
   border: 1px solid #333;
   background-color: #4285f4;
   border: none;
   font-weight: 700;
+  font-size: 20px;
+  padding: 10px 20px;
   cursor: pointer;
 }
 
@@ -71,7 +75,8 @@ html {
   background-color: #007aff;
 }
 
-#main {
-  display: flex;
-  flex-direction: column;
+@media (max-width: 1000px) {
+  #videos {
+    grid-template-columns: 1fr;
+  }
 }
