@@ -25,11 +25,12 @@ WebSocket.prototype.register = function (channel, callback) {
 
 WebSocket.prototype.propagate = function (channel, data) {
   const callback = this.channels.get(channel)
-  // redirect message to peer
-  if (!callback && this.peer) {
+  if (callback) {
+    callback(data)
+  } else if (this.peer) {
+    // redirect message to peer
     return this.peer.send(JSON.stringify({ channel, data }))
   }
-  callback(data)
 }
 
 const app = express()
