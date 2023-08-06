@@ -68,7 +68,7 @@ wss.on('connection', (ws, req) => {
       )
     }
 
-    console.log('peer availabe:', wss.availableClients.get(peer))
+    console.log('peer available:', wss.availableClients.get(peer))
     console.log(
       `matching ${req.socket.remoteAddress}:${
         req.socket.remotePort

@@ -1,4 +1,4 @@
-const WEBSOCKET_URL = 'ws://localhost:8080'
+import { WEBSOCKET_URL } from './env.js'
 
 if (!WEBSOCKET_URL) {
   throw new Error('Forgot to initialze some variables')
@@ -11,7 +11,7 @@ setInterval(function() {
   }
 }, 30000)
 
-let cn,ls
+let pc, ls
 
 document.getElementById('skip-btn').addEventListener('click', (e) => {
   ws.emit('disconnect')
@@ -44,7 +44,7 @@ WebSocket.prototype.propagate = function (channel, data) {
 async function initializeConnection() {
   const iceConfig = {
     iceServers: [
-      { 'url': 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun.l.google.com:19302' },
     ],
   }
 
