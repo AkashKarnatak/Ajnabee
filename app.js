@@ -47,6 +47,10 @@ app.get('/data', (_, res) => {
   res.send(Array.from(wss.availableClients.values()))
 })
 
+app.get('/online', (_, res) => {
+  res.send({ online: wss.clients.size })
+})
+
 wss.availableClients = new Map()
 wss.on('connection', (ws, req) => {
   console.log('new connection')
