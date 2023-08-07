@@ -5,6 +5,13 @@ if (!WEBSOCKET_URL) {
 }
 
 const $peopleOnline = document.querySelector('#peopleOnline p span')
+const $videoPeer = document.querySelector('#video-peer')
+const $loader = document.querySelector('#peer-video-loader')
+
+// hide loader when video connected
+$videoPeer.addEventListener('play', () => {
+  $loader.style.display = 'none'
+})
 
 const ws = new WebSocket(WEBSOCKET_URL)
 setInterval(function() {
@@ -15,7 +22,7 @@ setInterval(function() {
 
 let pc, ls
 
-document.getElementById('skip-btn').addEventListener('click', (e) => {
+document.getElementById('skip-btn').addEventListener('click', () => {
   ws.emit('disconnect')
   pc.close()
   initializeConnection()
@@ -86,7 +93,8 @@ async function initializeConnection() {
 
   const rs = new MediaStream()
 
-  document.getElementById('video-peer').srcObject = rs
+  $videoPeer.srcObject = rs
+  $loader.style.display = 'inline-block' // show loader
 
   ls.getTracks().forEach((track) => {
     console.log('adding tracks')
@@ -117,6 +125,8 @@ ws.addEventListener('open', async () => {
   })
 
   ws.register('iceCandidate', async (data) => {
+    // TODO: add a queueing mechanism to ensure remoteDescription is
+    // set before adding ice candidate
     await pc.addIceCandidate(data)
   })
 
@@ -134,10 +144,14 @@ ws.addEventListener('open', async () => {
     initializeConnection()
   })
 
-  ls = await navigator.mediaDevices.getUserMedia({
-    video: true,
-    audio: true,
-  })
+  try {
+    ls = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    })
+  } catch (e) {
+    alert('This website needs video and audio permission to work correctly')
+  }
   document.getElementById('video-self').srcObject = ls
 
   await initializeConnection()

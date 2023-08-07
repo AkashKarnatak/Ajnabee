@@ -95,3 +95,30 @@ html {
     grid-template-columns: 1fr;
   }
 }
+
+#peer {
+  position: relative;
+}
+
+#peer-video-loader {
+  position: absolute;
+  aspect-ratio: 1;
+  width: 16%;
+  top: 42%; /* FIXME: it may appear to be at the center but its not  */
+  left: 42%;
+  border-radius: 50%;
+  display: inline-block;
+  border-top: 6px solid #fff;
+  border-right: 6px solid transparent;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
