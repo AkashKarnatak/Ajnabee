@@ -59,10 +59,15 @@ async function initializeConnection() {
   }
 
   pc = new RTCPeerConnection(iceConfig)
+  pc.sentDescription = false
 
-  pc.onicegatheringstatechange = (e) => {
-    console.log(e.target.iceGatheringState)
-    if (e.target.iceGatheringState === 'complete') {
+  pc.onicecandidate = (e) => {
+    if (e.candidate) {
+      console.log(JSON.stringify(e.candidate))
+      ws.emit('iceCandidate', e.candidate)
+
+      if (pc.sentRemoteDescription) return
+      pc.sentRemoteDescription = true
       console.log(JSON.stringify(pc.localDescription))
       ws.emit('description', pc.localDescription)
     }
@@ -109,6 +114,10 @@ ws.addEventListener('open', async () => {
 
   ws.register('peopleOnline', async (data) => {
     $peopleOnline.innerHTML = data
+  })
+
+  ws.register('iceCandidate', async (data) => {
+    await pc.addIceCandidate(data)
   })
 
   ws.register('description', async (data) => {
