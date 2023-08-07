@@ -62,15 +62,15 @@ async function initializeConnection() {
   pc.sentDescription = false
 
   pc.onicecandidate = (e) => {
-    if (e.candidate) {
-      console.log(JSON.stringify(e.candidate))
-      ws.emit('iceCandidate', e.candidate)
+    if (!e.candidate) return
 
-      if (pc.sentRemoteDescription) return
+    if (!pc.sentRemoteDescription) {
       pc.sentRemoteDescription = true
       console.log(JSON.stringify(pc.localDescription))
       ws.emit('description', pc.localDescription)
     }
+    console.log(JSON.stringify(e.candidate))
+    ws.emit('iceCandidate', e.candidate)
   }
 
   pc.oniceconnectionstatechange = async function () {
