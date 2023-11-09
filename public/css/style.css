@@ -41,7 +41,7 @@ html {
 }
 
 .button {
-  background-color: #4caf50; /* Green */
+  background-color: #4285f4;
   border: none;
   color: white;
   text-align: center;
@@ -86,14 +86,12 @@ html {
   cursor: pointer;
 }
 
-#skip-btn:active {
-  background-color: #007aff;
+#feedback-btn {
+  background-color: #4caf50; /* Green */
 }
 
-@media (max-width: 1000px) {
-  #videos {
-    grid-template-columns: 1fr;
-  }
+#skip-btn:active {
+  background-color: #007aff;
 }
 
 #peer {
@@ -122,3 +120,64 @@ html {
     transform: rotate(360deg);
   }
 }
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 3% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#feedbackText {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+@media (max-width: 1000px) {
+  #videos {
+    grid-template-columns: 1fr;
+  }
+  .modal-content {
+    width: 50%;
+  }
+}
+
+@media (max-width: 500px) {
+  .modal-content {
+    width: 70%;
+  }
+}
+

@@ -19,7 +19,7 @@
           <div id="peopleOnline">
             <p><span>0</span>+ online now</p>
           </div>
-          <button id="feedback" class="button">
+          <button id="feedback-btn" class="button">
             Provide Feedback
           </button>
         </div>
@@ -48,6 +48,17 @@
         Skip
       </button>
 		</div>
-    <script src="./js/main.js" type="module"></script>
+    <div id="feedbackModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Provide Feedback</h2>
+        <form id="feedbackForm">
+          <textarea id="feedbackText" rows=10 placeholder="Your feedback..." required></textarea>
+          <input type="submit" class="button" value="Submit" />
+        </form>
+      </div>
+    </div>
+    <script defer src="./js/style.js"></script>
+    <script defer src="./js/main.js" type="module"></script>
 	</body>
 </html>

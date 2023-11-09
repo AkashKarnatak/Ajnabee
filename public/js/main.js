@@ -4,9 +4,11 @@ if (!WEBSOCKET_URL) {
   throw new Error('Forgot to initialze some variables')
 }
 
-const $peopleOnline = document.querySelector('#peopleOnline p span')
-const $videoPeer = document.querySelector('#video-peer')
-const $loader = document.querySelector('#peer-video-loader')
+const $ = (x) => document.querySelector(x)
+
+const $peopleOnline = $('#peopleOnline p span')
+const $videoPeer = $('#video-peer')
+const $loader = $('#peer-video-loader')
 
 // hide loader when video connected
 $videoPeer.addEventListener('play', () => {
@@ -14,7 +16,7 @@ $videoPeer.addEventListener('play', () => {
 })
 
 const ws = new WebSocket(WEBSOCKET_URL)
-setInterval(function() {
+setInterval(function () {
   if (ws.readyState === WebSocket.OPEN) {
     ws.emit('peopleOnline')
   }
@@ -22,7 +24,7 @@ setInterval(function() {
 
 let pc, ls
 
-document.getElementById('skip-btn').addEventListener('click', () => {
+$('#skip-btn').addEventListener('click', () => {
   ws.emit('disconnect')
   pc.close()
   initializeConnection()
@@ -60,7 +62,7 @@ async function initializeConnection() {
           'stun:stun2.l.google.com:19302',
           'stun:stun3.l.google.com:19302',
           'stun:stun4.l.google.com:19302',
-        ]
+        ],
       },
     ],
   }
@@ -152,7 +154,7 @@ ws.addEventListener('open', async () => {
   } catch (e) {
     alert('This website needs video and audio permission to work correctly')
   }
-  document.getElementById('video-self').srcObject = ls
+  $('#video-self').srcObject = ls
 
   await initializeConnection()
 })
