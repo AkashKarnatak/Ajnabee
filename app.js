@@ -1,5 +1,6 @@
-const express = require('express')
-const { WebSocket, WebSocketServer } = require('ws')
+import express from 'express'
+import { WebSocket, WebSocketServer } from 'ws'
+import db from './db/sqlite.js'
 
 const SERVER_PORT = process.env.SERVER_PORT
 
@@ -50,6 +51,11 @@ app.get('/data', (_, res) => {
 
 app.get('/online', (_, res) => {
   res.send({ online: wss.clients.size })
+})
+
+app.post('/feedback', express.json(), async (req, res) => {
+  await db.insertFeedback({ feedback: req.body.feedback })
+  res.sendStatus(200)
 })
 
 wss.availableClients = new Map()

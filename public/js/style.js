@@ -6,26 +6,35 @@ function configureFeedbackModal() {
   const $close = $('#feedbackModal .close')
   const $text = $('#feedbackText')
 
-  $btn.onclick = function () {
+  $btn.onclick = () => {
     $modal.style.display = 'block'
   }
 
-  $close.onclick = function () {
+  $close.onclick = () => {
     $modal.style.display = 'none'
   }
 
-  window.onclick = function (event) {
-    if (event.target == $modal) {
+  window.onclick = (e) => {
+    if (e.target == $modal) {
       $modal.style.display = 'none'
     }
   }
 
-  $('#feedbackForm').onsubmit = function (e) {
+  $('#feedbackForm').onsubmit = async (e) => {
     e.preventDefault()
-    let feedbackText = $text.value
+    let feedback = $text.value
     $text.value = ''
     $modal.style.display = 'none'
-    console.log(feedbackText) // TODO: send to server
+    // send feedback to backend
+    await fetch('/feedback', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        feedback
+      })
+    })
   }
 }
 

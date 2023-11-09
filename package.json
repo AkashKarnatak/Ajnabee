@@ -6,11 +6,14 @@
   "scripts": {
     "dev": "nodemon app.js -e js,html,css"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.6",
     "ws": "^8.13.0"
   },
   "devDependencies": {
