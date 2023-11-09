@@ -112,6 +112,10 @@ html {
   animation: rotation 1s linear infinite;
 }
 
+.mirror {
+  transform: scaleX(-1);
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
@@ -180,4 +184,3 @@ html {
     width: 70%;
   }
 }
-
