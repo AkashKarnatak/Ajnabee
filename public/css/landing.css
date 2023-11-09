@@ -1,0 +1,112 @@
+#hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: auto;
+    margin-top: 20px;
+}
+
+
+#black-box {
+    background-color: black;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    margin: 0 auto;
+    min-height: 44vh;
+    display: flex;
+    flex-direction: row;
+    
+}
+
+@media (max-width: 1366px) {
+  #black-box {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+}
+#help{
+    display: flex;
+    flex-direction: column;
+}
+
+#help-text{
+    
+    font-size: 1.3rem;
+}
+
+a {
+    color: lightskyblue;
+}
+
+#manipur-violence {
+    width: 400px;
+}
+
+#tags-master {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#tags-categories {
+    float: left;
+}
+
+#tags-input {
+    float: left;
+    margin-left: 1rem;
+}
+
+.tag {
+    background-color: lightslategray;
+    border: 1px;
+    color: white;
+    padding: 2px 6px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 2px 2px;
+}
+
+#footer {
+    color: gray;
+    bottom: 0;
+    position: fixed;
+    margin-left: 47%;
+}
+
+#monitor-video {
+    margin-top: 20px;
+    margin-bottom: 60px;
+    background-color: lightskyblue;
+    padding: 0px 100px;
+    color: black;
+    font-size: 1.2rem;
+    font-weight: 900;
+    border-radius: 5px;
+}
+
+#start-div{
+    display: flex;
+    gap: 20px;
+}
+
+#input-tag {
+    font-size: 1.2rem;
+    height: 30px;
+    width: 100%;
+
+}
+
+#str-btn {
+    border: none;
+    background-color: blue;
+    color: white;
+    font-size: 1.3rem;
+    padding: 4px 12px;
+    border-radius: 5px;
+}
