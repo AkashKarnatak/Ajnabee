@@ -1,0 +1,10 @@
+/* main container styles */
+#main {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 8% auto 9%;
+  grid-template-areas:
+    'top'
+    'msg'
+    'inp';
+}
