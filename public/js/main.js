@@ -5,7 +5,7 @@ function configureChat() {
   const $sendBtn = $('#send-btn')
   $input.focus()
 
-  $input.addEventListener('keypress', function (e) {
+  $input.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
       $sendBtn.click()
       e.preventDefault()

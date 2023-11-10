@@ -128,6 +128,8 @@
     width: 25%;
     bottom: 5px;
     right: 5px;
+  }
+  #video-self {
     border: 1px solid #888;
     border-radius: 5%;
   }
