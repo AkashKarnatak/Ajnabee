@@ -10,7 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
   <link href="css/style.css" rel="stylesheet" />
-  <link href="css/phone.css" rel="stylesheet" />
+  <link href="css/landing.css" rel="stylesheet" />
+  <link href="css/landing-phone.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -18,7 +19,7 @@
     <!-- top bar -->
     <div id="top-bar">
       <div id="logo">
-        <img width=20px src="/assets/logo.svg" alt="Ajnabee">
+        <img width="20px" src="/assets/logo.svg" alt="Ajnabee" />
       </div>
       <div id="top-right">
         <div id="peopleOnline">
@@ -28,25 +29,51 @@
       </div>
     </div>
 
-    <!-- video container -->
-    <div id="videos">
-      <div id="self">
-        <video class="video-player mirror" id="video-self" autoplay playsinline muted="muted"></video>
-      </div>
-      <div id="peer">
-        <video class="video-player mirror" id="video-peer" autoplay playsinline></video>
-        <div id="peer-video-loader"></div>
-      </div>
-    </div>
+    <!-- main content -->
+    <div id="content">
+      <!-- social message -->
+      <div id="social-message">
 
-    <!-- message area -->
-    <div id="message-area"></div>
+        <div id="message-content">
+          <p id="help-text"> Help manipur save its people from conflict that is currently happening.
+            <br>
+            <br>
+            A total of 53,000 people have been displaced due to the ongoing conflict and more that 200 people have been
+            killed
+            These are just reported figures with the real figures being much higher.
 
-    <!-- input area -->
-    <div id="input-area">
-      <button class="button" id="skip-btn">Skip<span>Esc</span></button>
-      <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off" />
-      <button class="button" id="send-btn">Send<span>Enter</span></button>
+            We stand with the people of manipur donate here to help bring peace again to the region.
+          </p>
+          <a href="https://www.gofundme.com/f/humanitarian-aid-to-victims-of-manipur-violence"> Help Manipur </a>
+        </div>
+
+        <img id="message-image" src="./assets/peace.png"></img>
+
+      </div>
+
+      <!-- instructions -->
+      <div id="instructions">
+        <p>Video is being monitored. Keep it clean.</p>
+      </div>
+
+      <div id="options-container">
+        <!-- interests -->
+        <div id="interest-container">
+          <p>What do you wanna talk about?</p>
+          <input type="text" id="interests" placeholder="Add your interests (options)" />
+          <div id="tag-container"></div>
+        </div>
+
+        <!-- chat options -->
+        <div id="chat-options">
+          <p>Start chatting</p>
+          <div id="button-container">
+            <button class="button"id="text-btn">Text</button>
+            <p>or</p>
+            <button class="button" id="video-btn">Video</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -63,7 +90,7 @@
   </div>
 
   <script defer src="./js/main.js"></script>
-  <script defer src="./js/video.js" type="module"></script>
+  <script defer src="./js/landing.js" type="module"></script>
 </body>
 
 </html>
