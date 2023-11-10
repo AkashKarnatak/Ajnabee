@@ -1,0 +1,141 @@
+@media (max-width: 1000px) {
+  .modal-content {
+    width: 50%;
+  }
+}
+
+@media (max-width: 1366px) {
+  /* main container styles */
+  #main {
+    grid-template-columns: 35% auto;
+  }
+
+  /* message area */
+  #message-status {
+    font-size: 18px;
+  }
+  .message {
+    font-size: 16px;
+  }
+
+  /* input area */
+  #input-area {
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  #skip-btn {
+    padding: 5px 30px;
+    font-size: 16px;
+  }
+  #send-btn {
+    padding: 5px 30px;
+    font-size: 16px;
+  }
+  #message-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-right: 8px;
+  }
+}
+
+@media (max-width: 800px) {
+  /* main container styles */
+  #main {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 8% 40% auto 7%;
+    grid-template-areas:
+      'top'
+      'vid'
+      'msg'
+      'inp';
+  }
+
+  /* top bar styles */
+  #top-bar {
+    padding: 10px;
+    align-items: center;
+  }
+  #logo h1 {
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 0px;
+  }
+  #peopleOnline p {
+    font-size: 16px;
+  }
+  #feedback-btn {
+    margin: 0;
+    padding: 8px;
+    background-color: #4caf50; /* Green */
+  }
+
+  /* video container */
+  #videos {
+    margin: 10px;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr;
+  }
+  #self {
+    margin: 0;
+    margin-right: 5px;
+    overflow: hidden;
+  }
+  #peer {
+    margin: 0;
+    margin-left: 5px;
+    overflow: hidden;
+  }
+
+  /* input area */
+  #input-area {
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  #skip-btn {
+    padding: 5px 30px;
+    font-size: 16px;
+  }
+  #send-btn {
+    display: none;
+  }
+  #message-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-right: 8px;
+  }
+
+  .modal-content {
+    width: 70%;
+  }
+}
+
+@media (max-width: 550px) {
+  /* video container */
+  #videos {
+    margin: 10px;
+    grid-template-rows: 1fr 0fr;
+    grid-template-columns: auto;
+  }
+  #self {
+    margin-bottom: 5px;
+    overflow: hidden;
+    display: none;
+  }
+  #peer {
+    margin-top: 5px;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 409px) {
+  #peopleOnline p {
+    margin: 10px;
+    margin-right: 0px;
+  }
+  #feedback-btn {
+    display: none;
+  }
+}

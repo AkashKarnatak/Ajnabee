@@ -159,16 +159,19 @@ body {
   display: flex;
   padding: 0;
   padding-bottom: 6px;
+  min-width: 0;
 }
 
 #skip-btn {
   margin: 0 8px;
   padding: 5px 40px;
   font-size: 20px;
+  min-width: 0;
 }
 #skip-btn span {
   display: block;
   font-size: 12px;
+  min-width: 0;
 }
 
 #message-input {
@@ -176,6 +179,7 @@ body {
   padding: 10px;
   border: 1px solid #ccc;
   font-size: 20px;
+  min-width: 0;
 }
 
 #send-btn {
@@ -240,16 +244,4 @@ body {
 }
 #submit-btn {
   padding: 10px 20px;
-}
-
-@media (max-width: 1000px) {
-  .modal-content {
-    width: 50%;
-  }
-}
-
-@media (max-width: 500px) {
-  .modal-content {
-    width: 70%;
-  }
 }

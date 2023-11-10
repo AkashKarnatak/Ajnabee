@@ -1,0 +1,79 @@
+@media (max-width: 1366px) {
+  /* message area */
+  #message-status {
+    font-size: 18px;
+  }
+  .message {
+    font-size: 16px;
+  }
+
+  /* input area */
+  #skip-btn {
+    padding: 5px 30px;
+    font-size: 16px;
+  }
+  #send-btn {
+    padding: 5px 30px;
+    font-size: 16px;
+  }
+  #message-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-right: 8px;
+  }
+}
+
+@media (max-width: 800px) {
+  /* top bar styles */
+  #top-bar {
+    padding: 10px;
+    align-items: center;
+  }
+  #logo h1 {
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 0px;
+  }
+  #peopleOnline p {
+    font-size: 16px;
+  }
+  #feedback-btn {
+    margin: 0;
+    padding: 8px;
+    background-color: #4caf50; /* Green */
+  }
+
+  /* input area */
+  #input-area {
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  #skip-btn {
+    padding: 5px 30px;
+    font-size: 16px;
+  }
+  #send-btn {
+    display: none;
+  }
+  #message-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-right: 8px;
+  }
+
+  .modal-content {
+    width: 70%;
+  }
+}
+
+@media (max-width: 409px) {
+  #peopleOnline p {
+    margin: 10px;
+    margin-right: 0px;
+  }
+  #feedback-btn {
+    display: none;
+  }
+}
