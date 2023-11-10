@@ -1,18 +1,5 @@
 const $ = (x) => document.querySelector(x)
 
-function configureChat() {
-  const $input = $('#message-input')
-  const $sendBtn = $('#send-btn')
-  $input.focus()
-
-  $input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-      $sendBtn.click()
-      e.preventDefault()
-    }
-  })
-}
-
 function configureTopbar() {
   const $logo = $('#logo')
   $logo.addEventListener('click', () => {
@@ -58,6 +45,5 @@ function configureFeedbackModal() {
   }
 }
 
-configureChat()
 configureTopbar()
 configureFeedbackModal()

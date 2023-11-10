@@ -37,7 +37,7 @@ WebSocket.prototype.propagate = function (channel, data) {
 const app = express()
 const port = SERVER_PORT
 
-app.use(express.static('./public'))
+app.use(express.static('./public', { extensions: ['html'] }))
 
 const server = app.listen(port, '0.0.0.0', () => {
   console.log(`Listening on port ${port}`)
@@ -66,30 +66,28 @@ wss.on('connection', (ws, req) => {
   })
 
   ws.register('match', (data) => {
-    const clients = (_ => data === 'video'
-      ? wss.availableVideoClients
-      : wss.availableTextClients
-    )()
-    const peer = Array.from(clients.keys()).random()
+    ws.clients = ((_) =>
+      data === 'video' ? wss.availableVideoClients : wss.availableTextClients)()
+    const peer = Array.from(ws.clients.keys()).random()
 
     if (!peer || peer == ws) {
       console.log('No peers found')
       console.log(
         `Pushing ${req.socket.remoteAddress}:${req.socket.remotePort} to queue`
       )
-      return clients.set(
+      return ws.clients.set(
         ws,
         `${req.socket.remoteAddress}:${req.socket.remotePort}`
       )
     }
 
-    console.log('peer available:', clients.get(peer))
+    console.log('peer available:', ws.clients.get(peer))
     console.log(
       `matching ${req.socket.remoteAddress}:${
         req.socket.remotePort
-      } with ${clients.get(peer)}`
+      } with ${ws.clients.get(peer)}`
     )
-    clients.delete(peer)
+    ws.clients.delete(peer)
 
     // set peer
     ws.peer = peer
@@ -116,6 +114,6 @@ wss.on('connection', (ws, req) => {
       ws.peer.send(JSON.stringify({ channel: 'disconnect', data: '' }))
       ws.peer.peer = undefined
     }
-    wss.availableVideoClients.delete(ws)
+    ws.clients.delete(ws)
   })
 })

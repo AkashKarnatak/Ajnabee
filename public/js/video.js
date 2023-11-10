@@ -5,6 +5,19 @@ const $ = (x) => document.querySelector(x)
 const ws = await createSocket()
 let pc, ls
 
+function configureChat() {
+  const $input = $('#message-input')
+  const $sendBtn = $('#send-btn')
+  $input.focus()
+
+  $input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      $sendBtn.click()
+      e.preventDefault()
+    }
+  })
+}
+
 const $peopleOnline = $('#peopleOnline p span')
 const $msgArea = $('#message-area')
 const $videoPeer = $('#video-peer')
@@ -161,4 +174,5 @@ try {
 }
 $('#video-self').srcObject = ls
 
+configureChat()
 await initializeConnection()

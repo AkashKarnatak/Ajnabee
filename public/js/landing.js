@@ -1,28 +1,35 @@
-document.getElementById("input-tag").addEventListener("keyup", function (event) {
-    if (event.key === "Enter" && event.target.value !== "") {
-        console.log("enter is clicked", event.target.value);
-        let tag = document.createElement("span");
-        tag.classList.add("tag");
-        tag.innerText = event.target.value + " x";
-        tag.onclick = function () {
-            tag.remove();
-        };
-        event.target.value = "";
-        document.getElementById("tags-categories").appendChild(tag);
-    }
-});
+const $ = (x) => document.querySelector(x)
 
- //Selector for your <video> element
-    // const video = document.querySelector('#myVidPlayer');
+function configureTags() {
+  const $input = $('#interest-container input')
+  const $tags = $('#tag-container')
+  const $textBtn = $('#text-btn')
+  const $videoBtn = $('#video-btn')
 
-    // //Core
-    // window.navigator.mediaDevices.getUserMedia({ video: true })
-    //     .then(stream => {
-    //         video.srcObject = stream;
-    //         video.onloadedmetadata = (e) => {
-    //             video.play();
-    //         };
-    //     })
-    //     .catch( () => {
-    //         alert('You have give browser the permission to run Webcam and mic ;( ');
-    //     });
+  $input.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ',') return
+
+    const value = $input.value
+    if (!value) return
+
+    const tag = document.createElement('div')
+    tag.id = 'tag'
+    tag.innerHTML = `<p>${value} ×</p>`
+    tag.style = "cursor: pointer"
+    tag.onclick = () => tag.remove()
+    $tags.appendChild(tag)
+    $input.value = ''
+
+    e.preventDefault()
+  })
+
+  $textBtn.addEventListener('click', () => {
+    window.location.href = '/chat'
+  })
+
+  $videoBtn.addEventListener('click', () => {
+    window.location.href = '/video'
+  })
+}
+
+configureTags()

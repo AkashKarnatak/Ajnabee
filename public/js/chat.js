@@ -4,6 +4,19 @@ const $ = (x) => document.querySelector(x)
 
 const ws = await createSocket()
 
+function configureChat() {
+  const $input = $('#message-input')
+  const $sendBtn = $('#send-btn')
+  $input.focus()
+
+  $input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      $sendBtn.click()
+      e.preventDefault()
+    }
+  })
+}
+
 const $peopleOnline = $('#peopleOnline p span')
 const $skipBtn = $('#skip-btn')
 const $sendBtn = $('#send-btn')
@@ -70,4 +83,5 @@ ws.register('disconnect', async () => {
   initializeConnection()
 })
 
+configureChat()
 initializeConnection()
