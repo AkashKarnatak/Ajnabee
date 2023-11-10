@@ -52,6 +52,13 @@ body {
   border: solid 1px;
   border-color: lightgray;
 }
+#logo {
+  height: 100%;
+  aspect-ratio: 2/1;
+}
+#logo img {
+  width: 100%;
+}
 #logo h1 {
   cursor: pointer;
   text-align: left;
