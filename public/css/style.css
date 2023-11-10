@@ -9,13 +9,6 @@ body {
   margin: 0px;
 }
 
-h1 {
-  text-align: left;
-  font-size: 2.5rem;
-  font-weight: 500;
-  margin: 0px;
-}
-
 /* general styles */
 .button {
   background-color: #4285f4;
@@ -58,6 +51,13 @@ h1 {
   padding: 10px 30px;
   border: solid 1px;
   border-color: lightgray;
+}
+#logo h1 {
+  cursor: pointer;
+  text-align: left;
+  font-size: 2.5rem;
+  font-weight: 500;
+  margin: 0px;
 }
 #top-right {
   display: flex;
@@ -135,12 +135,22 @@ h1 {
   font-size: 20px;
 }
 
+#message-status {
+  margin: 8px;
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+
 .message {
   margin: 8px;
 }
 
-.message span {
+.message .you {
   color: #4285f4;
+}
+
+.message .strange {
+  color: #4caf50;
 }
 
 /* input area */

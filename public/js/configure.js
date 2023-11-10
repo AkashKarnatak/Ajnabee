@@ -3,27 +3,20 @@ const $ = (x) => document.querySelector(x)
 function configureChat() {
   const $input = $('#message-input')
   const $sendBtn = $('#send-btn')
-  const $msgArea = $('#message-area')
   $input.focus()
-
-  $sendBtn.addEventListener('click', () => {
-    const msg = $input.value.trim()
-    if (!msg) return
-
-    const msgE = document.createElement('div')
-    msgE.className = 'message'
-    msgE.innerHTML = `<span>You:</span> ${msg}`
-
-    $msgArea.appendChild(msgE)
-    $msgArea.scrollTop = $msgArea.scrollHeight
-    $input.value = ''
-  })
 
   $input.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
       $sendBtn.click()
       e.preventDefault()
     }
+  })
+}
+
+function configureTopbar() {
+  const $logo = $('#logo')
+  $logo.addEventListener('click', () => {
+    window.location.href = '/'
   })
 }
 
@@ -65,5 +58,6 @@ function configureFeedbackModal() {
   }
 }
 
-configureFeedbackModal()
 configureChat()
+configureTopbar()
+configureFeedbackModal()

@@ -1,68 +1,33 @@
-import { WEBSOCKET_URL } from './env.js'
-
-if (!WEBSOCKET_URL) {
-  throw new Error('Forgot to initialze some variables')
-}
+import { createSocket } from './socket.js'
 
 const $ = (x) => document.querySelector(x)
 
+const ws = await createSocket()
+let pc, ls
+
 const $peopleOnline = $('#peopleOnline p span')
+const $msgArea = $('#message-area')
 const $videoPeer = $('#video-peer')
 const $loader = $('#peer-video-loader')
+const $skipBtn = $('#skip-btn')
+const $sendBtn = $('#send-btn')
+const $input = $('#message-input')
 
 // hide loader when video connected
 $videoPeer.addEventListener('play', () => {
   $loader.style.display = 'none'
 })
 
-const ws = new WebSocket(WEBSOCKET_URL)
-setInterval(function () {
-  if (ws.readyState === WebSocket.OPEN) {
-    ws.emit('peopleOnline')
-  }
-}, 30000)
+const initializeConnection = async () => {
+  $msgArea.innerHTML = `
+    <div id="message-status">Looking for people online...</div>
+  `
+  $sendBtn.disabled = true
 
-let pc, ls
-
-$('#skip-btn').addEventListener('click', () => {
-  ws.emit('disconnect')
-  pc.close()
-  initializeConnection()
-})
-
-WebSocket.prototype.init = function () {
-  this.channels = new Map()
-  this.addEventListener('message', (message) => {
-    const { channel, data } = JSON.parse(message.data.toString())
-    this.propagate(channel, data)
-  })
-}
-
-WebSocket.prototype.emit = function (channel, data) {
-  this.send(JSON.stringify({ channel, data }))
-}
-
-WebSocket.prototype.register = function (channel, callback) {
-  this.channels.set(channel, callback)
-}
-
-WebSocket.prototype.propagate = function (channel, data) {
-  const callback = this.channels.get(channel)
-  if (!callback) return
-  callback(data)
-}
-
-async function initializeConnection() {
   const iceConfig = {
     iceServers: [
       {
-        urls: [
-          'stun:stun.l.google.com:19302',
-          'stun:stun1.l.google.com:19302',
-          'stun:stun2.l.google.com:19302',
-          'stun:stun3.l.google.com:19302',
-          'stun:stun4.l.google.com:19302',
-        ],
+        urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'],
       },
     ],
   }
@@ -89,7 +54,7 @@ async function initializeConnection() {
     ) {
       console.log(pc.iceConnectionState)
       pc.close()
-      initializeConnection()
+      await initializeConnection()
     }
   }
 
@@ -111,50 +76,89 @@ async function initializeConnection() {
   }
 
   ws.emit('peopleOnline')
-  ws.emit('match')
+  ws.emit('match', 'video')
 }
 
-ws.addEventListener('open', async () => {
-  ws.init()
-
-  ws.register('begin', async () => {
-    const offer = await pc.createOffer()
-    await pc.setLocalDescription(offer)
-  })
-
-  ws.register('peopleOnline', async (data) => {
-    $peopleOnline.innerHTML = data
-  })
-
-  ws.register('iceCandidate', async (data) => {
-    // TODO: add a queueing mechanism to ensure remoteDescription is
-    // set before adding ice candidate
-    await pc.addIceCandidate(data)
-  })
-
-  ws.register('description', async (data) => {
-    await pc.setRemoteDescription(data)
-    if (!pc.localDescription) {
-      const answer = await pc.createAnswer()
-      await pc.setLocalDescription(answer)
-    }
-  })
-
-  ws.register('disconnect', async () => {
-    console.log('received disconnect request')
-    pc.close()
-    initializeConnection()
-  })
-
-  try {
-    ls = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    })
-  } catch (e) {
-    alert('This website needs video and audio permission to work correctly')
-  }
-  $('#video-self').srcObject = ls
-
+$skipBtn.addEventListener('click', async () => {
+  ws.emit('disconnect')
+  pc.close()
   await initializeConnection()
 })
+
+$sendBtn.addEventListener('click', () => {
+  const msg = $input.value.trim()
+  if (!msg) return
+
+  const msgE = document.createElement('div')
+  msgE.className = 'message'
+  msgE.innerHTML = `<span class="you">You:</span> ${msg}`
+
+  $msgArea.appendChild(msgE)
+  $msgArea.scrollTop = $msgArea.scrollHeight
+  $input.value = ''
+
+  ws.emit('message', msg)
+})
+
+ws.register('begin', async () => {
+  const offer = await pc.createOffer()
+  await pc.setLocalDescription(offer)
+})
+
+ws.register('peopleOnline', async (data) => {
+  $peopleOnline.innerHTML = data
+})
+
+ws.register('connected', async () => {
+  $msgArea.innerHTML = ''
+  const status = document.createElement('div')
+  status.id = 'message-status'
+  status.innerHTML = 'You are now talking to a random stranger'
+  $msgArea.appendChild(status)
+  $msgArea.scrollTop = $msgArea.scrollHeight
+  $sendBtn.disabled = false
+})
+
+ws.register('message', async (msg) => {
+  if (!msg) return
+
+  const msgE = document.createElement('div')
+  msgE.className = 'message'
+  msgE.innerHTML = `<span class="strange">Stranger:</span> ${msg}`
+
+  $msgArea.appendChild(msgE)
+  $msgArea.scrollTop = $msgArea.scrollHeight
+  $input.value = ''
+})
+
+ws.register('iceCandidate', async (data) => {
+  // TODO: add a queueing mechanism to ensure remoteDescription is
+  // set before adding ice candidate
+  await pc.addIceCandidate(data)
+})
+
+ws.register('description', async (data) => {
+  await pc.setRemoteDescription(data)
+  if (!pc.localDescription) {
+    const answer = await pc.createAnswer()
+    await pc.setLocalDescription(answer)
+  }
+})
+
+ws.register('disconnect', async () => {
+  console.log('received disconnect request')
+  pc.close()
+  await initializeConnection()
+})
+
+try {
+  ls = await navigator.mediaDevices.getUserMedia({
+    video: true,
+    audio: true,
+  })
+} catch (e) {
+  alert('This website needs video and audio permission to work correctly')
+}
+$('#video-self').srcObject = ls
+
+await initializeConnection()

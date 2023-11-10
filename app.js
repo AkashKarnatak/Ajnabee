@@ -45,10 +45,6 @@ const server = app.listen(port, '0.0.0.0', () => {
 
 const wss = new WebSocketServer({ server })
 
-app.get('/data', (_, res) => {
-  res.send(Array.from(wss.availableClients.values()))
-})
-
 app.get('/online', (_, res) => {
   res.send({ online: wss.clients.size })
 })
@@ -58,7 +54,8 @@ app.post('/feedback', express.json(), async (req, res) => {
   res.sendStatus(200)
 })
 
-wss.availableClients = new Map()
+wss.availableTextClients = new Map()
+wss.availableVideoClients = new Map()
 wss.on('connection', (ws, req) => {
   console.log('new connection')
 
@@ -68,32 +65,41 @@ wss.on('connection', (ws, req) => {
     ws.send(JSON.stringify({ channel: 'peopleOnline', data: wss.clients.size }))
   })
 
-  ws.register('match', () => {
-    const peer = Array.from(wss.availableClients.keys()).random()
+  ws.register('match', (data) => {
+    const clients = (_ => data === 'video'
+      ? wss.availableVideoClients
+      : wss.availableTextClients
+    )()
+    const peer = Array.from(clients.keys()).random()
+
     if (!peer || peer == ws) {
       console.log('No peers found')
       console.log(
         `Pushing ${req.socket.remoteAddress}:${req.socket.remotePort} to queue`
       )
-      return wss.availableClients.set(
+      return clients.set(
         ws,
         `${req.socket.remoteAddress}:${req.socket.remotePort}`
       )
     }
 
-    console.log('peer available:', wss.availableClients.get(peer))
+    console.log('peer available:', clients.get(peer))
     console.log(
       `matching ${req.socket.remoteAddress}:${
         req.socket.remotePort
-      } with ${wss.availableClients.get(peer)}`
+      } with ${clients.get(peer)}`
     )
-    wss.availableClients.delete(peer)
+    clients.delete(peer)
 
     // set peer
     ws.peer = peer
     peer.peer = ws
 
-    ws.send(JSON.stringify({ channel: 'begin', data: '' }))
+    ws.send(JSON.stringify({ channel: 'connected', data: '' }))
+    ws.peer.send(JSON.stringify({ channel: 'connected', data: '' }))
+    if (data === 'video') {
+      ws.send(JSON.stringify({ channel: 'begin', data: '' }))
+    }
   })
 
   ws.register('disconnect', async () => {
@@ -110,6 +116,6 @@ wss.on('connection', (ws, req) => {
       ws.peer.send(JSON.stringify({ channel: 'disconnect', data: '' }))
       ws.peer.peer = undefined
     }
-    wss.availableClients.delete(ws)
+    wss.availableVideoClients.delete(ws)
   })
 })
