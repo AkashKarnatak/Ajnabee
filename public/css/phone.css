@@ -118,11 +118,18 @@
     margin: 10px;
     grid-template-rows: 1fr 0fr;
     grid-template-columns: auto;
+    position: relative;
   }
   #self {
     margin-bottom: 5px;
     overflow: hidden;
-    display: none;
+    position: absolute;
+    z-index: 10;
+    width: 25%;
+    bottom: 5px;
+    right: 5px;
+    border: 1px solid #888;
+    border-radius: 5%;
   }
   #peer {
     margin-top: 5px;
