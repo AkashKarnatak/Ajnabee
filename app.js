@@ -12,6 +12,14 @@ Array.prototype.random = function () {
   return this[Math.floor(Math.random() * this.length)]
 }
 
+Array.prototype.shuffle = function () {
+  for (let i = this.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[this[i], this[j]] = [this[j], this[i]]
+  }
+  return this
+}
+
 WebSocket.prototype.init = function () {
   this.channels = new Map()
   this.on('message', (message) => {
@@ -54,8 +62,79 @@ app.post('/feedback', express.json(), async (req, res) => {
   res.sendStatus(200)
 })
 
-wss.availableTextClients = new Map()
-wss.availableVideoClients = new Map()
+const sleep = (x) => new Promise((r) => setTimeout(() => r(), x))
+
+async function findPeer(user, interests, interestUserMap, userInterestMap) {
+  // find random stranger
+  if (!interests || !interests.length) {
+    const peers = Array.from(userInterestMap.keys())
+    if (!peers || !peers.length) return [undefined, []]
+
+    let peer = peers.random()
+    if (peers.length === 1 && peer === user) return [undefined, []]
+    while (peer === user) {
+      peer = peers.random()
+    }
+    return [peer, []]
+  }
+
+  // find stranger with matching interests
+  for (const i of interests.shuffle()) {
+    const peers = Array.from(interestUserMap.get(i) || [])
+    if (!peers || !peers.length) continue
+
+    let peer = peers.random()
+    if (peers.length === 1 && peer === user) continue
+    while (peer === user) {
+      peer = peers.random()
+    }
+
+    const peerInterests = new Set(userInterestMap.get(peer))
+    const commonInterests = [...new Set(interests)].filter((x) =>
+      peerInterests.has(x)
+    )
+
+    return [peer, commonInterests]
+  }
+
+  // couldn't find stranger's with common interests
+  // wait to see if other's are active
+  addUser(user, interests, interestUserMap, userInterestMap)
+  await sleep(10000)
+  if (user.peer) return [user.peer, []]
+
+  // look for random peer
+  deleteUser(user, interestUserMap, userInterestMap)
+  return findPeer(user, [], interestUserMap, userInterestMap)
+}
+
+function addUser(user, interests, interestUserMap, userInterestMap) {
+  userInterestMap.set(user, interests)
+  interests.forEach((i) => {
+    const users = interestUserMap.get(i)
+    if (!users || !users.size) {
+      return interestUserMap.set(i, new Set([user]))
+    }
+    users.add(user)
+  })
+}
+
+function deleteUser(user, interestUserMap, userInterestMap) {
+  const userInterests = userInterestMap.get(user)
+  if (!userInterests) return
+  userInterests.forEach((interest) => {
+    const users = interestUserMap.get(interest)
+    if (!users || !users.size) return
+
+    users.delete(user)
+  })
+  userInterestMap.delete(user)
+}
+
+wss.textUserInterestMap = new Map()
+wss.textInterestUserMap = new Map()
+wss.videoUserInterestMap = new Map()
+wss.videoInterestUserMap = new Map()
 wss.on('connection', (ws, req) => {
   console.log('new connection')
 
@@ -65,38 +144,42 @@ wss.on('connection', (ws, req) => {
     ws.send(JSON.stringify({ channel: 'peopleOnline', data: wss.clients.size }))
   })
 
-  ws.register('match', ({ data, interests }) => {
-    interests = interests.map(x => x.trim().toLowerCase())
-    console.log(interests)
-    ws.clients = ((_) =>
-      data === 'video' ? wss.availableVideoClients : wss.availableTextClients)()
-    const peer = Array.from(ws.clients.keys()).random()
+  ws.register('match', async ({ data, interests }) => {
+    interests = interests.map((x) => x.trim().toLowerCase())
+    ws.interestUserMap =
+      data === 'video' ? wss.videoInterestUserMap : wss.textInterestUserMap
+    ws.userInterestMap =
+      data === 'video' ? wss.videoUserInterestMap : wss.textUserInterestMap
+    const [peer, commonInterests] = await findPeer(
+      ws,
+      interests,
+      ws.interestUserMap,
+      ws.userInterestMap
+    )
+    // if peer exist
+    if (ws.peer) return
 
-    if (!peer || peer == ws) {
+    if (!peer) {
       console.log('No peers found')
       console.log(
         `Pushing ${req.socket.remoteAddress}:${req.socket.remotePort} to queue`
       )
-      return ws.clients.set(
-        ws,
-        `${req.socket.remoteAddress}:${req.socket.remotePort}`
-      )
+      return addUser(ws, interests, ws.interestUserMap, ws.userInterestMap)
     }
 
-    console.log('peer available:', ws.clients.get(peer))
+    console.log('peer available:')
     console.log(
-      `matching ${req.socket.remoteAddress}:${
-        req.socket.remotePort
-      } with ${ws.clients.get(peer)}`
+      `matching ${req.socket.remoteAddress}:${req.socket.remotePort} now`
     )
-    ws.clients.delete(peer)
-
+    deleteUser(peer, peer.interestUserMap, peer.userInterestMap)
     // set peer
     ws.peer = peer
     peer.peer = ws
 
-    ws.send(JSON.stringify({ channel: 'connected', data: '' }))
-    ws.peer.send(JSON.stringify({ channel: 'connected', data: '' }))
+    ws.send(JSON.stringify({ channel: 'connected', data: commonInterests }))
+    ws.peer.send(
+      JSON.stringify({ channel: 'connected', data: commonInterests })
+    )
     if (data === 'video') {
       ws.send(JSON.stringify({ channel: 'begin', data: '' }))
     }
@@ -116,6 +199,6 @@ wss.on('connection', (ws, req) => {
       ws.peer.send(JSON.stringify({ channel: 'disconnect', data: '' }))
       ws.peer.peer = undefined
     }
-    ws.clients.delete(ws)
+    deleteUser(ws, ws.interestUserMap, ws.userInterestMap)
   })
 })

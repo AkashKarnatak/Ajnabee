@@ -25,7 +25,7 @@ const $input = $('#message-input')
 
 const initializeConnection = () => {
   $msgArea.innerHTML = `
-    <div id="message-status">Looking for people online...</div>
+    <div class="message-status">Looking for people online...</div>
   `
   $sendBtn.disabled = true
   $input.readOnly = true
@@ -65,12 +65,38 @@ ws.register('peopleOnline', async (data) => {
   $peopleOnline.innerHTML = data
 })
 
-ws.register('connected', async () => {
+ws.register('connected', async (data) => {
+  const params = new URLSearchParams(window.location.search)
+  const interests =
+    params
+      .get('interests')
+      ?.split(',')
+      .filter((x) => !!x)
+      .map((x) => x.trim()) || []
+
+  let commonInterests = data.at(-1) || ''
+  const first = data.slice(0, -1)
+  if (first.length) {
+    commonInterests = `${first.join(', ')} and ${commonInterests}`
+  }
+
   $msgArea.innerHTML = ''
   const status = document.createElement('div')
-  status.id = 'message-status'
+  status.className = 'message-status'
   status.innerHTML = 'You are now talking to a random stranger'
   $msgArea.appendChild(status)
+  if (commonInterests) {
+    const status = document.createElement('div')
+    status.className = 'message-status'
+    status.innerHTML = `You both like ${commonInterests}`
+    $msgArea.appendChild(status)
+  } else if (interests.length) {
+    const status = document.createElement('div')
+    status.className = 'message-status'
+    status.innerHTML =
+      "Couldn't find anyone with similar interests, so this stranger is completely random. Try adding more interests!"
+    $msgArea.appendChild(status)
+  }
   $msgArea.scrollTop = $msgArea.scrollHeight
   $sendBtn.disabled = false
   $input.readOnly = false

@@ -1,6 +1,6 @@
 @media (max-width: 1366px) {
   /* message area */
-  #message-status {
+  .message-status {
     font-size: 18px;
   }
   .message {
