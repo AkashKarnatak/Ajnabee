@@ -109,7 +109,6 @@ ws.register('message', async (msg) => {
 
   $msgArea.appendChild(msgE)
   $msgArea.scrollTop = $msgArea.scrollHeight
-  $input.value = ''
 })
 
 ws.register('disconnect', async () => {
