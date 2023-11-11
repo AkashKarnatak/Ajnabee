@@ -5,9 +5,15 @@ const $ = (x) => document.querySelector(x)
 const ws = await createSocket()
 let pc, ls
 
+const $peopleOnline = $('#peopleOnline p span')
+const $msgArea = $('#message-area')
+const $videoPeer = $('#video-peer')
+const $loader = $('#peer-video-loader')
+const $skipBtn = $('#skip-btn')
+const $sendBtn = $('#send-btn')
+const $input = $('#message-input')
+
 function configureChat() {
-  const $input = $('#message-input')
-  const $sendBtn = $('#send-btn')
   $input.focus()
 
   $input.addEventListener('keydown', function (e) {
@@ -17,14 +23,6 @@ function configureChat() {
     }
   })
 }
-
-const $peopleOnline = $('#peopleOnline p span')
-const $msgArea = $('#message-area')
-const $videoPeer = $('#video-peer')
-const $loader = $('#peer-video-loader')
-const $skipBtn = $('#skip-btn')
-const $sendBtn = $('#send-btn')
-const $input = $('#message-input')
 
 // hide loader when video connected
 $videoPeer.addEventListener('play', () => {

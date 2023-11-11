@@ -4,9 +4,13 @@ const $ = (x) => document.querySelector(x)
 
 const ws = await createSocket()
 
+const $peopleOnline = $('#peopleOnline p span')
+const $skipBtn = $('#skip-btn')
+const $sendBtn = $('#send-btn')
+const $msgArea = $('#message-area')
+const $input = $('#message-input')
+
 function configureChat() {
-  const $input = $('#message-input')
-  const $sendBtn = $('#send-btn')
   $input.focus()
 
   $input.addEventListener('keydown', function (e) {
@@ -16,12 +20,6 @@ function configureChat() {
     }
   })
 }
-
-const $peopleOnline = $('#peopleOnline p span')
-const $skipBtn = $('#skip-btn')
-const $sendBtn = $('#send-btn')
-const $msgArea = $('#message-area')
-const $input = $('#message-input')
 
 const initializeConnection = () => {
   $msgArea.innerHTML = `
