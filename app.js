@@ -202,6 +202,7 @@ wss.on('connection', (ws, req) => {
       ws.peer.send(JSON.stringify({ channel: 'disconnect', data: '' }))
       ws.peer.peer = undefined
     }
+    if (!ws.interestUserMap || !ws.userInterestMap) return
     deleteUser(ws, ws.interestUserMap, ws.userInterestMap)
   })
 })
