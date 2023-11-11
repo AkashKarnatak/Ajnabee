@@ -124,3 +124,20 @@
   font-size: 1.2rem;
   padding: 20px 40px;
 }
+
+#footer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 2px;
+  font-size: 0.8rem;
+}
+
+#footer a, p {
+  margin: 0;
+  padding: 0;
+}
+
+#footer a {
+  margin-left: 0.5rem;
+}
