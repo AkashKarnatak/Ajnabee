@@ -15,7 +15,7 @@ function configureTags() {
     const tag = document.createElement('div')
     tag.id = 'tag'
     tag.innerHTML = `<p>${value} ×</p>`
-    tag.style = "cursor: pointer"
+    tag.style = 'cursor: pointer'
     tag.onclick = () => tag.remove()
     $tags.appendChild(tag)
     $input.value = ''
@@ -32,4 +32,16 @@ function configureTags() {
   })
 }
 
+async function getPeopleOnline() {
+  const $peopleOnline = $('#peopleOnline p span')
+  const res = await fetch('/online')
+  if (!res.ok) {
+    return console.error("Couldn't fetch GET /online")
+  }
+  const { online } = await res.json()
+  console.log(online)
+  $peopleOnline.innerHTML = online
+}
+
 configureTags()
+await getPeopleOnline()
