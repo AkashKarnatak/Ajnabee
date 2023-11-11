@@ -1,19 +1,19 @@
-# Boujee - Anonymous Peer-to-Peer Video Chat
+# Ajnabee - Anonymous Peer-to-Peer Video Chat
 
-Boujee is an Omegle-inspired web application that enables users to engage in anonymous video chats with random peers.
+Ajnabee is an Omegle-inspired web application that enables users to engage in anonymous video chats with random peers.
 
 ## Setup and Installation
 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/AkashKarnatak/Boujee.git
+   git clone https://github.com/AkashKarnatak/Ajnabee.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd Boujee
+   cd Ajnabee
    ```
 
 3. Install dependencies:
