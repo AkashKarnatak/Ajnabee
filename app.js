@@ -65,7 +65,9 @@ wss.on('connection', (ws, req) => {
     ws.send(JSON.stringify({ channel: 'peopleOnline', data: wss.clients.size }))
   })
 
-  ws.register('match', (data) => {
+  ws.register('match', ({ data, interests }) => {
+    interests = interests.map(x => x.trim().toLowerCase())
+    console.log(interests)
     ws.clients = ((_) =>
       data === 'video' ? wss.availableVideoClients : wss.availableTextClients)()
     const peer = Array.from(ws.clients.keys()).random()

@@ -1,4 +1,5 @@
 const $ = (x) => document.querySelector(x)
+const $$ = (x) => document.querySelectorAll(x)
 
 function configureTags() {
   const $input = $('#interest-container input')
@@ -9,12 +10,12 @@ function configureTags() {
   $input.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter' && e.key !== ',') return
 
-    const value = $input.value
+    const value = $input.value.trim()
     if (!value) return
 
     const tag = document.createElement('div')
     tag.id = 'tag'
-    tag.innerHTML = `<p>${value} ×</p>`
+    tag.innerHTML = `<p><span>${value}</span> ×</p>`
     tag.style = 'cursor: pointer'
     tag.onclick = () => tag.remove()
     $tags.appendChild(tag)
@@ -24,11 +25,13 @@ function configureTags() {
   })
 
   $textBtn.addEventListener('click', () => {
-    window.location.href = '/chat'
+    const interests = Array.from($$('#tag p span')).map(x => x.innerText)
+    window.location.href = '/chat?' + new URLSearchParams({ interests })
   })
 
   $videoBtn.addEventListener('click', () => {
-    window.location.href = '/video'
+    const interests = Array.from($$('#tag p span')).map(x => x.innerText)
+    window.location.href = '/video?' + new URLSearchParams({ interests })
   })
 }
 

@@ -28,8 +28,17 @@ const initializeConnection = () => {
     <div id="message-status">Looking for people online...</div>
   `
   $sendBtn.disabled = true
+  $input.readOnly = true
+
   ws.emit('peopleOnline')
-  ws.emit('match', 'text')
+  const params = new URLSearchParams(window.location.search)
+  const interests =
+    params
+      .get('interests')
+      ?.split(',')
+      .filter(x => !!x)
+      .map(x => x.trim()) || []
+  ws.emit('match', { data: 'text', interests })
 }
 
 $skipBtn.addEventListener('click', async () => {
@@ -64,6 +73,7 @@ ws.register('connected', async () => {
   $msgArea.appendChild(status)
   $msgArea.scrollTop = $msgArea.scrollHeight
   $sendBtn.disabled = false
+  $input.readOnly = false
 })
 
 ws.register('message', async (msg) => {
