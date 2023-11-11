@@ -191,6 +191,7 @@ wss.on('connection', (ws, req) => {
     if (!ws.peer) return
     ws.peer.peer = undefined
     ws.peer.send(JSON.stringify({ channel: 'disconnect', data: '' }))
+    ws.peer = undefined
   })
 
   ws.on('close', () => {
