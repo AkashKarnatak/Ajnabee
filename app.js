@@ -65,6 +65,8 @@ app.post('/feedback', express.json(), async (req, res) => {
 const sleep = (x) => new Promise((r) => setTimeout(() => r(), x))
 
 async function findPeer(user, interests, interestUserMap, userInterestMap) {
+  // sleep for 1 to 2 seconds
+  await sleep(Math.floor(Math.random() * 1000 + 1000))
   // find random stranger
   if (!interests || !interests.length) {
     const peers = Array.from(userInterestMap.keys())
@@ -100,7 +102,7 @@ async function findPeer(user, interests, interestUserMap, userInterestMap) {
   // couldn't find stranger's with common interests
   // wait to see if other's are active
   addUser(user, interests, interestUserMap, userInterestMap)
-  await sleep(10000)
+  await sleep(6000)
   if (user.peer) return [user.peer, []]
 
   // look for random peer
