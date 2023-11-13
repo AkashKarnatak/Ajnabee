@@ -76,15 +76,16 @@
     margin: 10px;
     grid-template-rows: auto;
     grid-template-columns: 1fr 1fr;
+    margin-bottom: 0;
   }
   #self {
     margin: 0;
-    margin-right: 5px;
+    margin-left: 5px;
     overflow: hidden;
   }
   #peer {
     margin: 0;
-    margin-left: 5px;
+    margin-right: 5px;
     overflow: hidden;
   }
 
@@ -121,25 +122,25 @@
     position: relative;
   }
   #self {
-    margin-bottom: 5px;
+    margin: 0;
     overflow: hidden;
     position: absolute;
     z-index: 10;
     width: 25%;
     bottom: 5px;
-    right: 5px;
+    right: 10px;
   }
   #video-self {
     border: 1px solid #888;
     border-radius: 5%;
   }
   #peer {
-    margin-top: 5px;
+    margin: 0;
     overflow: hidden;
   }
 }
 
-@media (max-width: 409px) {
+@media (max-width: 416px) {
   #peopleOnline p {
     margin: 10px;
     margin-right: 0px;

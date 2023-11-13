@@ -51,11 +51,10 @@ body {
 }
 #logo {
   height: 100%;
-  aspect-ratio: 2/1;
 }
 #logo img {
   height: 100%;
-  width: auto;
+  width: 122px;
 }
 #logo h1 {
   cursor: pointer;
@@ -97,12 +96,21 @@ body {
 }
 
 #self {
-  margin-bottom: 5px;
   overflow: hidden;
+  margin-top: 5px;
 }
 #peer {
-  margin-top: 5px;
+  margin-bottom: 5px;
   overflow: hidden;
+  position: relative;
+}
+#peer img {
+  position: absolute;
+  width: 25%;
+  left: 10px;
+  bottom: 10px;
+  z-index: 10;
+  opacity: 0.7;
 }
 
 .video-player {
@@ -122,7 +130,7 @@ body {
 #peer-video-loader {
   position: absolute;
   aspect-ratio: 1;
-  width: 8%;
+  width: 25%;
   border-radius: 50%;
   display: inline-block;
   border-top: 6px solid #fff;
