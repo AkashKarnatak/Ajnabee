@@ -13,6 +13,12 @@ const $input = $('#message-input')
 function configureChat() {
   $input.focus()
 
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      $skipBtn.click()
+      e.preventDefault()
+    }
+  })
   $input.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
       $sendBtn.click()
