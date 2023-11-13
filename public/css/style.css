@@ -1,7 +1,3 @@
-html {
-  all: unset;
-}
-
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #eee;
@@ -51,13 +47,15 @@ body {
   padding: 10px 30px;
   border: solid 1px;
   border-color: lightgray;
+  align-items: center;
 }
 #logo {
   height: 100%;
   aspect-ratio: 2/1;
 }
 #logo img {
-  width: 100%;
+  height: 100%;
+  width: auto;
 }
 #logo h1 {
   cursor: pointer;
