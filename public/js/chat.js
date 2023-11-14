@@ -3,11 +3,15 @@ import { createSocket } from './socket.js'
 const $ = (x) => document.querySelector(x)
 
 const ws = await createSocket()
+const debounceTime = 1000
+let timeout
 
 const $peopleOnline = $('#peopleOnline p span')
 const $skipBtn = $('#skip-btn')
 const $sendBtn = $('#send-btn')
+const $msgs = $('#messages')
 const $msgArea = $('#message-area')
+const $typing = $('#typing')
 const $input = $('#message-input')
 
 function configureChat() {
@@ -21,14 +25,23 @@ function configureChat() {
   })
   $input.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
+      clearInterval(timeout)
+      ws.emit('typing', false)
       $sendBtn.click()
-      e.preventDefault()
+      return e.preventDefault()
     }
+    ws.emit('typing', true)
+  })
+  $input.addEventListener('keyup', function (e) {
+    clearInterval(timeout)
+    timeout = setTimeout(() => {
+      ws.emit('typing', false)
+    }, debounceTime)
   })
 }
 
 const initializeConnection = () => {
-  $msgArea.innerHTML = `
+  $msgs.innerHTML = `
     <div class="message-status">Looking for people online...</div>
   `
   $sendBtn.disabled = true
@@ -40,8 +53,8 @@ const initializeConnection = () => {
     params
       .get('interests')
       ?.split(',')
-      .filter(x => !!x)
-      .map(x => x.trim()) || []
+      .filter((x) => !!x)
+      .map((x) => x.trim()) || []
   ws.emit('match', { data: 'text', interests })
 }
 
@@ -58,7 +71,7 @@ $sendBtn.addEventListener('click', () => {
   msgE.className = 'message'
   msgE.innerHTML = `<span class="you">You:</span> ${msg}`
 
-  $msgArea.appendChild(msgE)
+  $msgs.appendChild(msgE)
   $msgArea.scrollTop = $msgArea.scrollHeight
   $input.value = ''
 
@@ -84,22 +97,22 @@ ws.register('connected', async (data) => {
     commonInterests = `${first.join(', ')} and ${commonInterests}`
   }
 
-  $msgArea.innerHTML = ''
+  $msgs.innerHTML = ''
   const status = document.createElement('div')
   status.className = 'message-status'
   status.innerHTML = 'You are now talking to a random stranger'
-  $msgArea.appendChild(status)
+  $msgs.appendChild(status)
   if (commonInterests) {
     const status = document.createElement('div')
     status.className = 'message-status'
     status.innerHTML = `You both like ${commonInterests}`
-    $msgArea.appendChild(status)
+    $msgs.appendChild(status)
   } else if (interests.length) {
     const status = document.createElement('div')
     status.className = 'message-status'
     status.innerHTML =
       "Couldn't find anyone with similar interests, so this stranger is completely random. Try adding more interests!"
-    $msgArea.appendChild(status)
+    $msgs.appendChild(status)
   }
   $msgArea.scrollTop = $msgArea.scrollHeight
   $sendBtn.disabled = false
@@ -113,7 +126,12 @@ ws.register('message', async (msg) => {
   msgE.className = 'message'
   msgE.innerHTML = `<span class="strange">Stranger:</span> ${msg}`
 
-  $msgArea.appendChild(msgE)
+  $msgs.appendChild(msgE)
+  $msgArea.scrollTop = $msgArea.scrollHeight
+})
+
+ws.register('typing', async (isTyping) => {
+  $typing.style.display = isTyping ? 'block' : 'none'
   $msgArea.scrollTop = $msgArea.scrollHeight
 })
 
