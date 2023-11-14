@@ -45,6 +45,7 @@ const initializeConnection = () => {
     <div class="message-status">Looking for people online...</div>
   `
   $sendBtn.disabled = true
+  $input.value = ''
   $input.readOnly = true
 
   ws.emit('peopleOnline')

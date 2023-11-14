@@ -53,6 +53,7 @@ const initializeConnection = async () => {
     <div class="message-status">Looking for people online...</div>
   `
   $sendBtn.disabled = true
+  $input.value = ''
   $input.readOnly = true
 
   const iceConfig = {
