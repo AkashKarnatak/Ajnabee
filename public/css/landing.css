@@ -141,3 +141,9 @@
 #footer a {
   margin-left: 0.5rem;
 }
+
+#disclaimer{
+  padding: 10px 20px;
+  color: gray;
+  font-size: 13px;
+}
