@@ -149,10 +149,6 @@ body {
   font-size: 20px;
 }
 
-#typing {
-  display: none;
-}
-
 .message-status {
   margin: 8px;
   margin-bottom: 16px;
