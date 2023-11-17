@@ -1,5 +1,11 @@
 const $ = (x) => document.querySelector(x)
 const $$ = (x) => document.querySelectorAll(x)
+const esc = (x) => {
+  const txt = document.createTextNode(x)
+  const p = document.createElement('p')
+  p.appendChild(txt)
+  return p.innerHTML
+}
 
 function configureTags() {
   const $input = $('#interest-container input')
@@ -15,7 +21,7 @@ function configureTags() {
 
     const tag = document.createElement('div')
     tag.id = 'tag'
-    tag.innerHTML = `<p><span>${value}</span> ×</p>`
+    tag.innerHTML = `<p><span>${esc(value)}</span> ×</p>`
     tag.style = 'cursor: pointer'
     tag.onclick = () => tag.remove()
     $tags.appendChild(tag)
@@ -43,7 +49,7 @@ async function getPeopleOnline() {
   }
   const { online } = await res.json()
   console.log(online)
-  $peopleOnline.innerHTML = online
+  $peopleOnline.innerHTML = esc(online)
 }
 
 configureTags()

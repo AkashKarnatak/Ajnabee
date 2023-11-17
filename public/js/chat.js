@@ -1,6 +1,12 @@
 import { createSocket } from './socket.js'
 
 const $ = (x) => document.querySelector(x)
+const esc = (x) => {
+  const txt = document.createTextNode(x)
+  const p = document.createElement('p')
+  p.appendChild(txt)
+  return p.innerHTML
+}
 
 const ws = await createSocket()
 const debounceTime = 1000
@@ -70,7 +76,7 @@ $sendBtn.addEventListener('click', () => {
 
   const msgE = document.createElement('div')
   msgE.className = 'message'
-  msgE.innerHTML = `<span class="you">You:</span> ${msg}`
+  msgE.innerHTML = `<span class="you">You:</span> ${esc(msg)}`
 
   $msgs.appendChild(msgE)
   $msgArea.scrollTop = $msgArea.scrollHeight
@@ -80,7 +86,7 @@ $sendBtn.addEventListener('click', () => {
 })
 
 ws.register('peopleOnline', async (data) => {
-  $peopleOnline.innerHTML = data
+  $peopleOnline.innerHTML = esc(data)
 })
 
 ws.register('connected', async (data) => {
@@ -106,7 +112,7 @@ ws.register('connected', async (data) => {
   if (commonInterests) {
     const status = document.createElement('div')
     status.className = 'message-status'
-    status.innerHTML = `You both like ${commonInterests}`
+    status.innerHTML = `You both like ${esc(commonInterests)}`
     $msgs.appendChild(status)
   } else if (interests.length) {
     const status = document.createElement('div')
@@ -125,7 +131,7 @@ ws.register('message', async (msg) => {
 
   const msgE = document.createElement('div')
   msgE.className = 'message'
-  msgE.innerHTML = `<span class="strange">Stranger:</span> ${msg}`
+  msgE.innerHTML = `<span class="strange">Stranger:</span> ${esc(msg)}`
 
   $msgs.appendChild(msgE)
   $msgArea.scrollTop = $msgArea.scrollHeight
