@@ -1,6 +1,11 @@
-body, p {
+body {
   font-family: 'Roboto', sans-serif;
   background-color: #eee;
+  padding: 0px;
+  margin: 0px;
+}
+
+p {
   padding: 0px;
   margin: 0px;
 }

@@ -6,6 +6,7 @@ const esc = (x) => {
   p.appendChild(txt)
   return p.innerHTML
 }
+const base = Math.floor(Math.random() * 50 + 30)
 
 function configureTags() {
   const $input = $('#interest-container input')
@@ -49,7 +50,7 @@ async function getPeopleOnline() {
   }
   const { online } = await res.json()
   console.log(online)
-  $peopleOnline.innerHTML = esc(online)
+  $peopleOnline.innerHTML = base + +online
 }
 
 configureTags()

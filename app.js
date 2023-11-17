@@ -54,7 +54,7 @@ const server = app.listen(port, '0.0.0.0', () => {
 const wss = new WebSocketServer({ server })
 
 app.get('/online', (_, res) => {
-  res.send({ online: 173 + wss.clients.size })
+  res.send({ online: wss.clients.size })
 })
 
 app.post('/feedback', express.json(), async (req, res) => {
@@ -143,7 +143,7 @@ wss.on('connection', (ws, req) => {
   ws.init()
 
   ws.register('peopleOnline', () => {
-    ws.send(JSON.stringify({ channel: 'peopleOnline', data: 173 + wss.clients.size }))
+    ws.send(JSON.stringify({ channel: 'peopleOnline', data: wss.clients.size }))
   })
 
   ws.register('match', async ({ data, interests }) => {

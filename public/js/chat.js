@@ -10,6 +10,7 @@ const esc = (x) => {
 
 const ws = await createSocket()
 const debounceTime = 1000
+const base = Math.floor(Math.random() * 50 + 30)
 let timeout
 
 const $peopleOnline = $('#peopleOnline p span')
@@ -86,7 +87,7 @@ $sendBtn.addEventListener('click', () => {
 })
 
 ws.register('peopleOnline', async (data) => {
-  $peopleOnline.innerHTML = esc(data)
+  $peopleOnline.innerHTML = base + +data
 })
 
 ws.register('connected', async (data) => {
