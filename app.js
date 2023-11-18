@@ -23,8 +23,12 @@ Array.prototype.shuffle = function () {
 WebSocket.prototype.init = function () {
   this.channels = new Map()
   this.on('message', (message) => {
-    const { channel, data } = JSON.parse(message.toString())
-    this.propagate(channel, data)
+    try {
+      const { channel, data } = JSON.parse(message.toString())
+      this.propagate(channel, data)
+    } catch (e) {
+      console.error(e)
+    }
   })
 }
 
