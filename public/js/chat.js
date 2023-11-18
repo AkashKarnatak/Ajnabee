@@ -83,7 +83,7 @@ $sendBtn.addEventListener('click', () => {
   $msgArea.scrollTop = $msgArea.scrollHeight
   $input.value = ''
 
-  ws.emit('message', msg)
+  ws.emit('message', esc(msg))
 })
 
 ws.register('peopleOnline', async (data) => {
