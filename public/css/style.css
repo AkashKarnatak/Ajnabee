@@ -53,6 +53,10 @@ p {
   border: solid 1px;
   border-color: lightgray;
   align-items: center;
+  background-color: white;
+  box-shadow: 0 0.1em 0.3em #ccc;
+  -moz-box-shadow: 0 0.1em 0.3em #ccc;
+  -webkit-box-shadow: 0 0.1em 0.3em #ccc;
 }
 #logo {
   height: 100%;

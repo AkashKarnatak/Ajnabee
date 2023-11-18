@@ -6,7 +6,14 @@ const esc = (x) => {
   p.appendChild(txt)
   return p.innerHTML
 }
-const base = Math.floor(Math.random() * 50 + 30)
+let base = Math.floor(Math.random() * 50 + 30)
+const noise = Math.floor(Math.random() * 10 - 5)
+
+if (!sessionStorage.getItem('peopleOnline')) {
+  sessionStorage.setItem('peopleOnline', base)
+} else {
+  base = +sessionStorage.getItem('peopleOnline')
+}
 
 function configureTags() {
   const $input = $('#interest-container input')
@@ -32,12 +39,12 @@ function configureTags() {
   })
 
   $textBtn.addEventListener('click', () => {
-    const interests = Array.from($$('#tag p span')).map(x => x.innerText)
+    const interests = Array.from($$('#tag p span')).map((x) => x.innerText)
     window.location.href = '/chat?' + new URLSearchParams({ interests })
   })
 
   $videoBtn.addEventListener('click', () => {
-    const interests = Array.from($$('#tag p span')).map(x => x.innerText)
+    const interests = Array.from($$('#tag p span')).map((x) => x.innerText)
     window.location.href = '/video?' + new URLSearchParams({ interests })
   })
 }
@@ -50,7 +57,8 @@ async function getPeopleOnline() {
   }
   const { online } = await res.json()
   console.log(online)
-  $peopleOnline.innerHTML = base + +online
+
+  $peopleOnline.innerHTML = base + noise + +online
 }
 
 configureTags()
