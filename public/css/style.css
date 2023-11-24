@@ -32,7 +32,7 @@ p {
 
 /* main container styles */
 #main {
-  height: 100vh;
+  height: 100dvh !important; /* for modern browsers, like chrome*/
   box-sizing: border-box;
   display: grid;
   grid-template-rows: 8% auto 9%;
@@ -41,6 +41,10 @@ p {
     'top top'
     'vid msg'
     'vid inp';
+}
+
+#main{
+  height: 100vh; /* for non modern browsers, like Instagram in app browser. */
 }
 
 /* top bar styles */
